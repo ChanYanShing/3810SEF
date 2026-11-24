@@ -3,6 +3,9 @@
 <main class="wrap narrow">
   <a class="back" href="/desk"><%= student ? "Back to waiting items" : "Back to the shelf" %></a>
   <% if (flash) { %><p class="banner" role="status"><%= flash %></p><% } %>
+  <% if (!student && item.spot === "Pending Inspection") { %>
+    <p class="banner banner-wait" role="status">A student reported this item. Students cannot see it yet. When it reaches the desk, click Edit and enter its real shelf spot to put it on the waiting list.</p>
+  <% } %>
   <article class="detail status-<%= item.status %>">
     <div class="card-top">
       <span class="pill pill-<%= item.status %>"><%= item.statusLabel %></span>
@@ -18,6 +21,10 @@
         <div><dt>Shelf spot</dt><dd><%= item.spot || "Not written down" %></dd></div>
       <% } %>
       <div><dt>Logged by</dt><dd><%= item.loggedBy || "Unknown" %></dd></div>
+      <% if (!student && item.reportedBy !== "Staff") { %>
+        <div><dt>Reported by</dt><dd><%= item.reportedBy %></dd></div>
+        <div><dt>Reporter contact</dt><dd><%= item.reporterContact || "Not given" %></dd></div>
+      <% } %>
       <div><dt>Status</dt><dd><%= item.statusLabel %></dd></div>
     </dl>
     <% if (item.description) { %><p class="note"><%= item.description %></p><% } %>

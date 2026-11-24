@@ -1,17 +1,23 @@
-<% const staff = user.role !== "student"; %>
-<header class="topbar<%= staff ? ' staff-sidebar' : ' student-topbar' %>">
-  <a class="brand" href="/desk">Lost Desk</a>
-  <nav class="topnav" aria-label="<%= staff ? 'Staff tools' : 'Lost Desk' %>">
-    <% if (staff) { %>
-      <a href="/desk" class="<%= title === 'User management' || title === 'Category management' ? '' : 'nav-active' %>">Items</a>
-      <a href="/manage/users" <%= title === 'User management' ? 'aria-current="page"' : '' %>>Users</a>
-      <a href="/manage/categories" <%= title === 'Category management' ? 'aria-current="page"' : '' %>>Categories</a>
-    <% } else { %>
+<header class="topbar">
+  <a class="brand" href="/desk">
+    <span class="mark" aria-hidden="true"></span>
+    Lost Desk
+  </a>
+
+  <nav class="topnav" aria-label="Desk">
+    <% if (user.role === "student") { %>
       <a href="/desk" <%= title === "Waiting" ? 'aria-current="page"' : "" %>>Browse items</a>
-      <a href="/desk#collection">Collection desk</a>
+    <% } else { %>
+      <a href="/desk" <%= title === "Desk" ? 'aria-current="page"' : "" %>>Items</a>
+      <a href="/desk/analytics">Analytics</a>
     <% } %>
+
     <form class="logout" action="/logout" method="post">
-      <span class="who"><%= user.displayName %></span>
+      <a class="who profile-link" href="/profile" title="My Profile">
+        <img src="/icons/user.svg" class="profile-icon" alt="">
+        My profile
+      </a>
+
       <button type="submit">Log out</button>
     </form>
   </nav>

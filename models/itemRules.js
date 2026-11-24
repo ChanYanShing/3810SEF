@@ -144,6 +144,16 @@ function parseItemInput(body, mode) {
   if (want("spot")) data.spot = cleanText(src.spot, 80);
   if (want("description")) data.description = cleanText(src.description, 280);
 
+  if (want("loggedBy")) {
+    const who = cleanText(src.loggedBy, 20);
+    if (!who && partial) {
+      // A partial update can omit who handed the item in.
+    } else if (who !== "Staff" && who !== "Student") {
+      if (partial) errors.push("Logged by must be Staff or Student.");
+      else data.loggedBy = "Staff";
+    } else data.loggedBy = who;
+  }
+
   if (partial && Object.keys(data).length === 0) errors.push("Provide at least one field to update.");
   return { data, errors };
 }
@@ -186,6 +196,47 @@ function presentItem(doc) {
     spot: row.spot || "",
     description: row.description || "",
     loggedBy: row.loggedBy || "",
+    reportedBy: row.reportedBy || "Staff",
+    reporterContact: row.reporterContact || "",
+  };
+}
+
+// A student reporting a find. Reuses the normal item rules, then fixes the
+// fields a student may not choose: it always starts on the shelf, and the
+// shelf spot waits for staff to inspect it.
+const PENDING_SPOT = "Pending Inspection";
+const CONTACT_RE = /^[A-Za-z0-9._%+@\-\s()]*$/;
+
+function parseReportInput(body) {
+  const src = body || {};
+  const { data, errors } = parseItemInput(
+    {
+      name: src.name,
+      category: src.category,
+      place: src.place,
+      campus: src.campus,
+      foundOn: src.foundOn,
+      description: src.description,
+      status: "stored",
+      spot: PENDING_SPOT,
+    },
+    "create"
+  );
+  const contact = cleanText(src.reporterContact, 80);
+  if (!CONTACT_RE.test(contact)) errors.push("Contact can only be an email address or a phone number.");
+  else data.reporterContact = contact;
+  return { data, errors };
+}
+
+function emptyReportValues() {
+  return {
+    name: "",
+    category: "electronics",
+    place: "library",
+    campus: "MC",
+    foundOn: toInputDate(new Date()),
+    description: "",
+    reporterContact: "",
   };
 }
 
@@ -200,6 +251,7 @@ function emptyFormValues() {
     foundOn: toInputDate(new Date()),
     spot: "",
     description: "",
+    loggedBy: "Staff",
   };
 }
 
@@ -214,10 +266,13 @@ module.exports = {
   STATUS_LABELS,
   CODE_RE,
   cleanText,
+  PENDING_SPOT,
   parseItemInput,
+  parseReportInput,
   buildFilter,
   presentItem,
   emptyFormValues,
+  emptyReportValues,
   daysAgo,
   labelOf,
 };

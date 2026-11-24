@@ -55,6 +55,13 @@
   </div>
 
   <div class="field">
+    <label for="loggedBy">Logged by</label>
+    <select id="loggedBy" name="loggedBy">
+      <option value="Staff" <%= values.loggedBy === "Student" ? "" : "selected" %>>Staff</option>
+      <option value="Student" <%= values.loggedBy === "Student" ? "selected" : "" %>>Student</option>
+    </select>
+  </div>
+  <div class="field">
     <label for="spot">Shelf spot <span class="hint">optional</span></label>
     <input id="spot" name="spot" maxlength="80" value="<%= values.spot %>">
   </div>

@@ -1,6 +1,7 @@
 const bcrypt = require("bcryptjs");
 const User = require("./User");
 const Item = require("./Item");
+const { withSampleCover } = require("./sampleCovers");
 const { daysAgo } = require("./itemRules");
 
 const DEMO_USERS = [
@@ -44,7 +45,7 @@ async function seedDatabase() {
 
   const count = await Item.countDocuments();
   if (count === 0) {
-    await Item.insertMany(sampleItems());
+    await Item.insertMany(sampleItems().map(withSampleCover));
     console.log("Seeded an empty lost-property desk with sample items.");
   }
 }

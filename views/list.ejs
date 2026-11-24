@@ -1,19 +1,29 @@
 <%- include("partials/head") %>
 <%- include("partials/nav") %>
 <main class="wrap desk-page">
-  <header class="page-head">
-    <div>
-      <h1><%= student ? "Find a lost item" : "Item management" %></h1>
-      <p class="page-intro"><%= student ? "Browse items found around campus and see where to collect yours." : "Search, log and update items at the campus lost-property desk." %></p>
+  <% if (student) { %>
+    <section id="collection" class="collection-info" aria-label="Where to collect an item">
+      <%- include("partials/contact") %>
+    </section>
+    <div class="browse-summary">
+      <p><strong><%= stats.stored %></strong> Waiting to be claimed</p>
+      <a class="btn" href="/desk/report">Report found item</a>
     </div>
-    <% if (!student) { %>
+  <% } else { %>
+    <header class="page-head">
+      <h1>Item management</h1>
       <div class="filter-actions">
         <a class="btn" href="/desk/new">Log item</a>
         <a class="btn btn-ghost" href="/desk/export.csv?<%= new URLSearchParams(search).toString() %>"
           title="Download the current search results">Export CSV</a>
       </div>
-    <% } %>
-  </header>
+    </header>
+    <section class="stats" aria-label="Shelf summary">
+      <article class="summary-stored"><strong><%= stats.stored - stats.pending %></strong><span>Stored</span></article>
+      <article class="summary-claimed"><strong><%= stats.claimed %></strong><span>Claimed</span></article>
+      <article class="summary-pending"><strong><%= stats.pending %></strong><span>Needs check-in</span></article>
+    </section>
+  <% } %>
 
   <% if (flash) { %><p class="banner" role="status"><%= flash %></p><% } %>
 
@@ -107,29 +117,21 @@
         </article>
       <% }); %>
     </section>
-    <section id="collection" class="collection-info" aria-label="Where to collect an item">
-      <%- include("partials/contact") %>
-    </section>
   <% } else if (items.length) { %>
     <div class="table-scroll" tabindex="0" role="region" aria-label="Item management table">
       <table class="desk-table">
-        <thead><tr><th scope="col">Photo</th><th scope="col">Reference</th><th scope="col">Item name</th><th scope="col">Category</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
+        <thead><tr><th scope="col">Photo</th><th scope="col">Reference</th><th scope="col">Item name</th><th scope="col">Campus</th><th scope="col">Status</th><th scope="col">Actions</th></tr></thead>
         <tbody>
           <% items.forEach((item) => { %>
             <tr>
               <td class="item-thumb"><%- include("partials/cover", { item }) %></td>
               <td><span class="code"><%= item.code %></span></td>
               <th scope="row"><a href="/desk/<%= item.code %>"><%= item.name %></a></th>
-              <td><%= item.categoryLabel %></td>
-              <td><span class="pill pill-<%= item.status %>"><%= item.statusLabel %></span></td>
+              <td><%= item.campusLabel %></td>
+              <td><span class="pill pill-<%= item.needsCheckIn ? "pending" : item.status %>"><%= item.needsCheckIn ? "Needs check-in" : item.statusLabel %></span></td>
               <td><div class="row-actions">
-                <a href="/desk/<%= item.code %>/edit">Edit</a>
-                <% if (item.status === "stored") { %>
-                  <form method="post" action="/desk/<%= item.code %>/status">
-                    <input type="hidden" name="status" value="claimed">
-                    <button type="submit">Mark claimed</button>
-                  </form>
-                <% } %>
+                <a href="/desk/<%= item.code %>">View</a>
+                <a href="/desk/<%= item.code %>/edit"><%= item.needsCheckIn ? "Check in" : "Edit" %></a>
               </div></td>
             </tr>
           <% }); %>

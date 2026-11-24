@@ -23,11 +23,16 @@ const itemSchema = new mongoose.Schema(
     coverBytes: { type: Buffer, select: false },
     coverType: { type: String },
     loggedBy: { type: String, enum: ["Staff", "Student"], default: "Staff" },
+    // Who handed it in through the web report form (username / student ID).
+    // Older records have no value here, so the default keeps them readable.
+    reportedBy: { type: String, trim: true, maxlength: 20, default: "Staff" },
+    reporterContact: { type: String, trim: true, maxlength: 80, default: "" },
   },
   { timestamps: true }
 );
 
 itemSchema.index({ status: 1, place: 1 });
 itemSchema.index({ foundOn: -1 });
+itemSchema.index({ loggedBy: 1 });
 
 module.exports = mongoose.model("Item", itemSchema);
