@@ -24,7 +24,7 @@ Before you zip it, set the folder and zip name to your real project group, for e
 | He Junru | 13395307 | EJS pages and CSS |
 | XIE Tengyue | 13270086 | Personal Profile Module Development, EJS Page Design, and CSS Styling |
 | _fill in_ | _fill in_ | README, curl commands, and the 10-minute demo |
-| SONG Zhaohe (宋昭赫) | 13407624 | Staff CSV export, filtered-download UI, and export regression tests |
+| SONG Zhaohe  | 13407624 | Staff CSV export, filtered-download UI, and export regression tests |
 | _fill in_ | _fill in_ | _fill in_ |
 
 - **Workload division:** Replace the blank rows with the real members. Each person should be able to explain their part in the week-13 demo. A member with no real work is a free rider.
