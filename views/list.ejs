@@ -6,7 +6,13 @@
       <h1><%= student ? "Find a lost item" : "Item management" %></h1>
       <p class="page-intro"><%= student ? "Browse items found around campus and see where to collect yours." : "Search, log and update items at the campus lost-property desk." %></p>
     </div>
-    <% if (!student) { %><a class="btn" href="/desk/new">Log item</a><% } %>
+    <% if (!student) { %>
+      <div class="filter-actions">
+        <a class="btn" href="/desk/new">Log item</a>
+        <a class="btn btn-ghost" href="/desk/export.csv?<%= new URLSearchParams(search).toString() %>"
+          title="Download the current search results">Export CSV</a>
+      </div>
+    <% } %>
   </header>
 
   <% if (flash) { %><p class="banner" role="status"><%= flash %></p><% } %>

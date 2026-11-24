@@ -23,6 +23,7 @@ const session = require("express-session");
 const mongoose = require("mongoose");
 const bcrypt = require("bcryptjs");
 const { readCoverUpload } = require("./models/coverUpload");
+const { createItemCsv } = require("./models/itemExport");
 
 const User = require("./models/User");
 const Item = require("./models/Item");
@@ -279,6 +280,23 @@ app.get("/desk", requireLogin, async (req, res, next) => {
     const items = matchedDocs.map((doc) => viewItem(doc, student));
     const stats = tally(allDocs.map((doc) => ({ status: doc.status })));
     res.render("list", { title: student ? "Waiting" : "Desk", items, stats, search, showing: items.length, student });
+  } catch (err) {
+    return next(err);
+  }
+});
+
+// Register this named route before /desk/:code so it is not treated as an item code.
+app.get("/desk/export.csv", requireStaff, async (req, res, next) => {
+  try {
+    const { filter } = buildFilter(req.query);
+    const docs = await Item.find(filter)
+      .select("code name category place campus status foundOn spot description loggedBy")
+      .sort({ foundOn: -1, name: 1 })
+      .lean();
+    res.set("Cache-Control", "private, no-store");
+    res.attachment("lost-desk-items.csv");
+    res.type("text/csv; charset=utf-8");
+    return res.send(createItemCsv(docs));
   } catch (err) {
     return next(err);
   }

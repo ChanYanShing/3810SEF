@@ -24,7 +24,7 @@ Before you zip it, set the folder and zip name to your real project group, for e
 | He Junru | 13395307 | EJS pages and CSS |
 | XIE Tengyue | 13270086 | Personal Profile Module Development, EJS Page Design, and CSS Styling |
 | _fill in_ | _fill in_ | README, curl commands, and the 10-minute demo |
-| _fill in_ | _fill in_ | _fill in_ |
+| SONG Zhaohe (宋昭赫) | 13407624 | Staff CSV export, filtered-download UI, and export regression tests |
 | _fill in_ | _fill in_ | _fill in_ |
 
 - **Workload division:** Replace the blank rows with the real members. Each person should be able to explain their part in the week-13 demo. A member with no real work is a free rider.
@@ -47,6 +47,8 @@ Before you zip it, set the folder and zip name to your real project group, for e
   - `itemRules.js` — categories, places, statuses, validation, search filter
   - `seed.js` — demo staff and sample items when the shelf is empty
 - **.env.example:** Configuration template. Copy it to `.env` and fill in the settings locally.
+- **models/itemExport.js:** CSV formatting for the staff export route, including spreadsheet formula protection.
+- **test/itemExport.test.js:** Automated CSV regression tests; run with `npm test` (no database required).
 
 ### Item fields
 
@@ -172,6 +174,32 @@ supports the existing search and editing workflow. Users lists accounts by
 name and role. Categories lists the current catalogue and item counts, with
 links to filter the list. Account and category definitions are read-only in
 these screens.
+
+### Export search results to CSV (staff only)
+
+Sign in as staff, set the search fields on **Items**, and press **Search**.
+Then press **Export CSV** to download the displayed results as
+`lost-desk-items.csv`. The export reuses all five search conditions (`q`,
+`category`, `place`, `campus`, `status`) and the same date/name sorting as the
+item list. With no filters, it exports all items. With no matches, the file
+contains column headings only.
+
+The columns are reference, item name, category, found at, campus, status,
+date found, shelf spot, description, and logged by. Photos and account data
+are not included. UTF-8 with a BOM preserves Chinese text; commas, quotes,
+and line breaks are escaped as CSV. Text that could be treated as a spreadsheet
+formula receives a leading apostrophe.
+
+GET `/desk/export.csv` requires a staff session. Signed-out visitors are
+redirected to sign-in; students are redirected to their waiting list. Responses
+use `Cache-Control: private, no-store` because the file includes staff shelf
+locations. Export does not update or delete records.
+
+Run `npm test` for the CSV-formatting regression tests. For a demo, sign in
+as staff, search category **Electronics** and status **Stored**, and export.
+Confirm that the references in the file match the filtered list. Search for a
+nonexistent reference to demonstrate a headings-only export. Sign in as a
+student and confirm the button is absent and the direct URL redirects.
 
 ### Use of the RESTful CRUD services
 
