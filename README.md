@@ -19,7 +19,7 @@ Before you zip it, set the folder and zip name to your real project group, for e
 
 | Name | SID | Work role |
 | --- | --- | --- |
-| Chan Yan Shing | s1385703 | Express server, Mongoose models, session login, REST APIs |
+| Chan Yan Shing | 13857033 | System's implementation and validation: Express server, Mongoose models, Database and System's foundation, REST APIs |
 | XI Haoyang | 13410235 | Server configuration, README setup guide, and local regression testing |
 | He Junru | 13395307 | EJS pages and CSS |
 | XIE Tengyue | 13270086 | Personal Profile Module Development, EJS Page Design, and CSS Styling |
