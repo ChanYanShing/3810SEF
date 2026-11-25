@@ -25,7 +25,6 @@ Before you zip it, set the folder and zip name to your real project group, for e
 | XIE Tengyue | 13270086 | Personal Profile Module Development, EJS Page Design, and CSS Styling |
 | Chan Pak Hei | 14601418 | Student "Report found item" with staff check-in (approval), and the staff Analytics dashboard using MongoDB aggregation, and the 10-minute demo |
 | SONG Zhaohe  | 13407624 | Staff CSV export, filtered-download UI, and export regression tests |
-| _fill in_ | _fill in_ | _fill in_ |
 
 - **Workload division:** Replace the blank rows with the real members. Each person should be able to explain their part in the week-13 demo. A member with no real work is a free rider.
 
