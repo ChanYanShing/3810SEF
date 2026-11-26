@@ -4,8 +4,6 @@ A server-side lost-and-found desk for a campus. Staff sign in, log objects that 
 
 This project follows the COMP3810SEF group-project requirements: Express.js, Mongoose, login and logout, CRUD web pages for signed-in staff, and REST CRUD APIs.
 
-Before you zip it, set the folder and zip name to your real project group, for example `comp3810sef_group3`. The copy here uses `comp3810sef_g42` because the class note says COMP3810 G42. Change that if the Google Sheet uses a different number. Do not include `node_modules`.
-
 ---
 
 ## 1. Project info
@@ -19,7 +17,7 @@ Before you zip it, set the folder and zip name to your real project group, for e
 
 | Name | SID | Work role |
 | --- | --- | --- |
-| Chan Yan Shing | 13857033 | System's implementation and validation: Express server, Mongoose models, Database and System's foundation, REST APIs |
+| Chan Yan Shing | 13857033 | System's implementation and validation: Express server, Mongoose models, System's database and foundation, REST APIs |
 | XI Haoyang | 13410235 | Server configuration, README setup guide, and local regression testing |
 | He Junru | 13395307 | EJS pages and CSS |
 | XIE Tengyue | 13270086 | Personal Profile Module Development, EJS Page Design, and CSS Styling |
@@ -245,12 +243,3 @@ curl -s http://localhost:8099/api/items/K184206
 ```
 
 A bad body returns 400. An unknown code returns 404.
-
-### Submission checklist
-
-- Exclude `node_modules` from the submission ZIP.
-- Exclude `.env` and any legacy `atlas.local.json` from the submission ZIP. Include `.env.example`.
-- Zip name: `comp3810sef_groupNo.zip`, containing that same folder name.
-- Deadline: 23:59, 30 Nov 2026. Submit a day early if you can.
-- Register the presentation slot by 23:59, 16 Nov 2026.
-- Paste the curl block into column K before class.
